@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cdwoo.dao.CompanyDao">
+    <select id="queryCompanyByPage" resultType="java.util.Map">
+        select * from company where id != 0 limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    
+    <select id="queryCompanyCount" resultType="java.lang.Long">
+	    select count(*) from company where id != 0;
+	</select>
+	
+    <select id="getCompanyById" resultType="com.cdwoo.entity.Company">
+        select * from company where id = ${id};
+    </select>
+    
+    <insert id="addCompany">
+        insert into company (companyName,status,port) value (#{companyName},0,#{port});
+    </insert>
+    
+    <update id="editCompany">
+        update company set companyName=#{companyName},port=#{port} where id = ${id}
+    </update>
+    
+    <update id="updateCompanyStatus">
+        update company set status=#{status} where id = ${id}
+    </update>
+    
+    <select id="getCompanyList" resultType="java.util.Map">
+        select * from company where id != 0;
+    </select>
+</mapper>

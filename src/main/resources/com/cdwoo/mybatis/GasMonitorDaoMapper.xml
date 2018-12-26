@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdwoo.dao.GasMonitorDao">
+	<select id="getGasInfo" resultType="java.util.Map">
+		select a.*,b.position from `gas-data` a left join `device-position` b on a.deviceNo= b.deviceNo and a.companyId = b.companyId where a.companyId = ${companyId} order by a.deviceNo asc;
+	</select>
+	
+	<select id="getDeviceCount" resultType = "java.lang.Long">
+	    select count(*) from `gas-data` where companyId = ${companyId};
+	</select>
+	
+	<select id="getGasInfo4App" resultType="java.util.Map">
+		SELECT
+			deviceNo,
+			gasLevel O2,
+			O2Warning O2_state,
+			gasLevel1 CH4,
+			CH4Warning CH4_state,
+			temperature,
+			CASE 
+			   when (100-(4100 - dePowerVoltage)*100/700) &gt;= 100
+		       then 100
+		       when (100-(4100 - dePowerVoltage)*100/700) &lt; 100
+		       then (100-(4100 - dePowerVoltage)*100/700) 
+		    END power ,
+			deTemp person_num
+		FROM
+			`gas-data`
+		WHERE
+			createTime &gt;= date_add(now(), INTERVAL - 3 MINUTE)
+			and companyId = ${companyId};
+		ORDER BY
+			id ASC;
+	</select>
+	
+	<select id="getGasWarn4App" resultType="java.util.Map">
+		select deviceNo,gasLevel O2, O2Warning O2_state,low O2_low,high O2_high,gasLevel1 CH4, CH4Warning CH4_state ,low1 CH4_low,high1 CH4_high,deTemp person_num, createTime from `gas-warn-data` where createTime &gt; #{start} and createTime &lt; #{end}
+		<if test="deviceNo != null and deviceNo != ''">
+		 and deviceNo = ${deviceNo}
+		</if>
+		and companyId = ${companyId};
+		order by createTime desc
+	</select>
+	
+	<select id="setPosition">
+	    replace into `device-position` (deviceNo,companyId, position, updateTime) values (${deviceNo},${companyId}, #{position}, now());
+	</select>
+</mapper>

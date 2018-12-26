@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cdwoo.dao.RoleDao">
+    <select id="queryRoleByPage" resultType="java.util.Map">
+        select * from c_role where status = 0 and id != 0 limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    
+    <insert id="addRole">
+        insert into c_role (role,roleName,description,status,rIds) value (#{role},#{roleName},#{description},0,#{rIds});
+    </insert>
+    
+    <select id="queryRoleCount" resultType="java.lang.Long">
+        select count(*) from c_role where status = 0;
+    </select>
+    
+    <select id="getRoleById" resultType="com.cdwoo.entity.Role">
+        select * from c_role where id = ${id}
+    </select>
+    
+    <update id="editRole">
+        update c_role set role=#{role},roleName=#{roleName}, description=#{description},rIds=#{rIds} where id = ${id};
+    </update>
+    
+    <select id= "getRole" resultType="java.util.Map">
+        select * from c_role where status = 0 and id !=0;
+    </select>
+    
+        
+    <select id="getCurrentRoleCount" resultType="java.lang.Long">
+        select count(*) from c_user where roleId = ${id};
+    </select>
+    
+    <delete id="deleteRole">
+        delete from c_role where id = ${id};
+    </delete>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cdwoo.dao.ResourceDao">
+    
+    <select id="getResources" resultType="java.util.Map">
+        select * from c_resource where status = 1;
+    </select>
+    
+    <insert id="addResource">
+        insert into c_resource (resource,name,description,url,pId,status) value(#{resource},#{name},#{description},#{url},${pId},1)
+    </insert>
+    
+    <select id="getResourceById" resultType="com.cdwoo.entity.Resource">
+        select * from c_resource where id = ${id};
+    </select>
+    
+    <select id="editResource">
+        update c_resource set resource=#{resource},name=#{name},description=#{description},url=#{url} where id = ${id};
+    </select>
+    
+    <update id="deleteResource">
+        update c_resource set status = 4 where id = ${id}
+    </update>
+    
+    <select id="checkHaveChild" resultType="java.lang.Long">
+        select count(*) from c_resource where pId = ${id} and status =1;
+    </select>
+    
+    <select id="getResourcesByRole" resultType="java.util.Map">
+        select * from c_resource where id in (${rIds}) and status = 1;
+    </select>
+</mapper>

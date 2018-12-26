@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cdwoo.dao.UserDao">
+    <select id="queryUserByPage" resultType="java.util.Map">
+        select u.*,date_format(u.createTime, '%Y-%m-%d %H:%i:%s') createTimeStr,
+         c.companyName, r.roleName from c_user u 
+         left join company c on u.companyId = c.id
+         left join c_role r on u.roleId = r.id
+         where u.status = 1 and u.id != 0 
+         <if test="roleId > 0">
+             and u.companyId = ${companyId}
+         </if>
+         limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    
+    <select id="queryUserCount" resultType="java.lang.Long">
+	    select count(*) from c_user where status =1 and id != 0
+	    <if test="roleId > 0">
+        	and companyId = ${companyId}     
+        </if>
+	</select>
+	
+    <select id="getUserById" resultType="com.cdwoo.entity.User">
+        select u.*,date_format(u.createTime, '%Y-%m-%d %H:%i:%s') createTimeStr,c.companyName from c_user u left join company c on u.companyId = c.id where u.id = ${id};
+    </select>
+    
+    <insert id="addUser">
+        insert into c_user (userName,realName,email,password,createTime,status,roleId,companyId) value (#{userName},#{realName},#{email},#{password},now(),1,${roleId},${companyId});
+    </insert>
+    
+    <update id="editUser">
+        update c_user set userName=#{userName},realName=#{realName},email=#{email}
+        <if test="password != ''">
+            ,password=#{password}
+        </if>
+        ,roleId = ${roleId} where id = ${id}
+    </update>
+    
+    <select id="getUserByUserName" resultType="com.cdwoo.entity.User">
+        select u.*,date_format(u.createTime, '%Y-%m-%d %H:%i:%s') createTimeStr,c.companyName from c_user u left join company c on u.companyId = c.id where u.userName = #{userName};
+    </select>
+        
+    <delete id="deleteUser">
+        delete from c_user where id = ${id};
+    </delete>
+</mapper>
