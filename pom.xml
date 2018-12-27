@@ -2,16 +2,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cdwoo</groupId>
-  <artifactId>gas-monitor</artifactId>
+  <artifactId>energy-manage</artifactId>
   <packaging>war</packaging>
   <version>0.0.1-SNAPSHOT</version>
-  <name>gas-monitor Maven Webapp</name>
+  <name>energy-manage Maven Webapp</name>
   <url>http://maven.apache.org</url>
-  <parent>
-  	<groupId>com.cdwoo</groupId>
-	<artifactId>cbdp-parent</artifactId>
-	<version>1.0.1</version>
-  </parent>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
@@ -29,8 +24,14 @@
 	    <artifactId>cbdp</artifactId>
 	    <version>1.0.1</version>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.bidib.jbidib.org.qbang.rxtx/rxtxcomm -->
+	<dependency>
+	    <groupId>com.cdwoo</groupId>
+	    <artifactId>rxtxcomm</artifactId>
+	    <version>1.0.1</version>
+	</dependency>
   </dependencies>
   <build>
-    <finalName>gas-monitor</finalName>
+    <finalName>energy-manage</finalName>
   </build>
 </project>

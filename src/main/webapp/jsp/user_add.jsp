@@ -19,7 +19,7 @@
   <div class="Huiform">
     <form action="${pageContext.request.contextPath}/user/addUser.do" method="post" class="form form-horizontal" id="form-user-add">
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>船厂：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>厂家名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<span class="select-box">
 				<select class="select" id="companyId" name="companyId">

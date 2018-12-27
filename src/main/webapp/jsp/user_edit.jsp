@@ -20,7 +20,7 @@
     <form action="${pageContext.request.contextPath}/user/editUser.do" method="post" class="form form-horizontal" id="form-user-edit">
 		<input type="hidden" name="id" value="${u.id}"/>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>船厂：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>厂家名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<span class="select-box">
 				<select class="select" id="company" name="companyId" disabled="disabled" >
@@ -123,7 +123,6 @@ $("#form-user-edit").validate({
 			{success:function(data){
 	            if(data.success){
 	            	alert("用户编辑成功");
-	            	parent.location.reload();
 	            	var index = parent.layer.getFrameIndex(window.name);
 	        		parent.layer.close(index);
 	            }else{

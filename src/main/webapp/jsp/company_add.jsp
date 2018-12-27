@@ -16,14 +16,14 @@
 <script src="${pageContext.request.contextPath}/lib/zTree/v3/js/jquery.ztree.excheck-3.5.js"></script>  
 <script src="${pageContext.request.contextPath}/lib/zTree/v3/js/jquery.ztree.exedit-3.5.js"></script> 
 <link href="${pageContext.request.contextPath}/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
-<title>添加船厂</title>
+<title>添加厂家</title>
 </head>
 <body>
 <div class="pd-20">
   <div class="Huiform">
     <form action="${pageContext.request.contextPath}/company/addCompany.do" method="post" class="form form-horizontal" id="form-company-edit">
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>船厂名称：</label>
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>厂家名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<input type="text" class="input-text"   id="companyName" name="companyName">
 			</div>

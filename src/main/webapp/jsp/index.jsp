@@ -29,7 +29,7 @@
 <body>
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
-		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="javascript:;">GAS-MONITOR</a> 
+		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="javascript:;">ENERGY-MANAGE</a> 
 			<span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.0</span> 
 			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 			
@@ -98,7 +98,7 @@
 				<iframe scrolling="yes" frameborder="0" src="${pageContext.request.contextPath}/jsp/company_list.jsp"></iframe>
 			</c:if>
 			<c:if test="${USER_CONTEXT.id != 0}">
-				<iframe scrolling="yes" frameborder="0" src="${pageContext.request.contextPath}/jsp/gas_monitor.jsp"></iframe>
+				<iframe scrolling="yes" frameborder="0" src="${pageContext.request.contextPath}/jsp/meter_info_statistic.jsp"></iframe>
 			</c:if>
 		</div>
 	</div>

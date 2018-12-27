@@ -22,8 +22,8 @@
            url: "../resource/getResources.do",  
            dataFilter: filter,  
            contentType: "application/json",  
-           type:"get" 
-	   },  
+           type:"get"
+	   },
 	   view: {  
 	        expandSpeed: "",  
 	        addHoverDom: addHoverDom,  
@@ -77,7 +77,7 @@
     		return false;
     	}  
 	}  
-	function beforeRename(treeId, treeNode, newName) {  
+	function beforeRename(treeId, treeNode, newName) {
 	    if (newName.length == 0) {  
 	        alert("节点名称不能为空.");  
 	        return false;  

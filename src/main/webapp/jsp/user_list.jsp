@@ -39,7 +39,7 @@
 <script type="text/javascript">
 	var pageSize = 10;
 	var contextPath = "<%=contextPath%>";
-    var tableParam = [{"field":"船厂",
+    var tableParam = [{"field":"厂家名称",
 		   		       "name":"companyName"}
     				 ,{"field":"用户名",
     				   "name":"userName"}

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.cdwoo.dao.RoleDao">
     <select id="queryRoleByPage" resultType="java.util.Map">
-        select * from c_role where status = 0 and id != 0 limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+        select * from c_role where status = 0 limit ${pageSize} offset ${pageNo*pageSize-pageSize};
     </select>
     
     <insert id="addRole">

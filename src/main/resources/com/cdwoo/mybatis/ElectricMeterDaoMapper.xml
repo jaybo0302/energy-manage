@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cdwoo.dao.ElectricMeterDao">
+    <select id="queryElectricMeterByPage" resultType="java.util.Map">
+        select * from `electric-meter` em
+		left join company c on em.companyId = c.id        
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    <select id="queryElectricMeterCount" resultType="java.lang.Long">
+        select count(*) from `electric-meter` em
+        where status = 0
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    <insert id="addElectricmeter">
+        insert into `electric-meter` (deviceNo, companyId,deviceName,position,status,port)
+        value (#{deviceNo}, ${companyId},#{deviceName}, #{position},0,#{port});
+    </insert>
+    
+    <update id="editElectricmeter">
+        update `electric-meter` set deviceName = #{deviceName},position=#{position},port=#{port}  where deviceNo = ${deviceNo} and companyId = ${companyId};
+    </update>
+    
+    <update id="updateElectricmeterStatus">
+        update `electric-meter` set status = ${status} where deviceNo = ${deviceNo} and companyId = ${companyId};
+    </update>
+    <select id="getElectricMeterById" resultType="java.util.Map">
+        select * from `electric-meter` where deviceNo = ${deviceNo} and companyId = ${companyId}
+    </select>
+    
+    <select id="getDevicesByCompany" resultType="java.util.Map">
+        select * from `electric-meter` where companyId = ${companyId}
+    </select>
+    
+    <select id="getMaxDeviceNo" resultType="java.lang.Integer">
+        select max(deviceNo) from `electric-meter` where companyId = ${companyId}
+    </select>
+    
+    <select id="getDeviceNoExists" resultType="java.lang.Long">
+        select count(*) from `electric-meter` where companyId = ${companyId} and deviceNo = ${deviceNo}
+    </select>
+    
+</mapper>

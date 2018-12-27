@@ -16,7 +16,7 @@
 <link href="${pageContext.request.contextPath}/css/highlight.min.css" rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/css/common.css" rel="stylesheet" type="text/css" />
 <link href="${pageContext.request.contextPath}/css/reset.css" rel="stylesheet" type="text/css" />
-<title>船厂管理</title>
+<title>厂家管理</title>
 <%
 	String contextPath = request.getContextPath();
 %>
@@ -24,7 +24,7 @@
 
 <body>
 <div class="page-container">
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="addCompany()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加船厂</a></span></div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="addCompany()" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加厂家</a></span></div>
 	<br/>
 	<table class="table table-border table-bordered table-hover table-bg table-sort" id ="companyTable">
 	</table>
@@ -39,12 +39,10 @@
 <script type="text/javascript">
 	var pageSize = 10;
 	var contextPath = "<%=contextPath%>";
-    var tableParam = [{"field":"船厂名称",
+    var tableParam = [{"field":"厂家名称",
     				   "name":"companyName"}
     				 ,{"field":"端口号",
     				   "name":"port"}
-//     				 ,{"field":"email",
-//     				   "name":"email"}
     				 ,{"field":"状态",
     				   "name":"status",
     				   formatter:function(status){
@@ -68,7 +66,7 @@
 	var moduleName = "company";
 	function updateCompany(id, status) {
 		if (status == 1) {
-			layer.confirm('确认要启用该船厂吗？',function(index){
+			layer.confirm('确认要启用该厂家吗？',function(index){
 				$.ajax({
 					type: 'POST',
 					url: '${pageContext.request.contextPath}/company/updateCompanyStatus.do',
@@ -88,7 +86,7 @@
 				});
 			});
 		} else if (status == 0) {
-			layer.confirm('确认要停用该船厂吗？',function(index){
+			layer.confirm('确认要停用该厂家吗？',function(index){
 				$.ajax({
 					type: 'POST',
 					url: '${pageContext.request.contextPath}/company/updateCompanyStatus.do',
@@ -113,11 +111,11 @@
 	}
 	
 	function editCompany(id) {
-		layer_show("编辑船厂","${pageContext.request.contextPath}/company/getEditPage.do?id="+id,800,500);
+		layer_show("编辑厂家","${pageContext.request.contextPath}/company/getEditPage.do?id="+id,800,500);
 	}
 	
 	function addCompany() {
-		layer_show("添加船厂","${pageContext.request.contextPath}/jsp/company_add.jsp",800,500);
+		layer_show("添加厂家","${pageContext.request.contextPath}/jsp/company_add.jsp",800,500);
 	}
 </script>
 </html>

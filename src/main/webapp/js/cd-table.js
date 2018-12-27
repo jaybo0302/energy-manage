@@ -8,10 +8,10 @@ var currentNo;
 function refresh(pageNo){
 	//moduleName 模块名称，需要声明
 	$("#"+moduleName+"Table").empty();
-	var theadStr = "<thead><tr>";
+	var theadStr = "<thead><tr class='text-c'>";
 	var tbodyStr = "<tbody>";
 	/*tableParam 表格参数，需要声明 格式如下
-				var tableParam = [{"field":"名称",
+    var tableParam = [{"field":"名称",
 					   "name":"name"}
 					 ,{"field":"部门",
 					   "name":"department"}
@@ -86,6 +86,8 @@ function refresh(pageNo){
 						coping:true,
 						jump:true,
 						homePage:'首页',
+						mode: 'fixed',
+						count: 5,
 						endPage:'尾页',
 						isHide:true,
 						current:result.data.currentPage,
@@ -93,6 +95,7 @@ function refresh(pageNo){
 							refresh(api.getCurrent());
 						},
 					});
+					$("#totalCount").html(result.data.totalCount);
 				} else {
 					parent.window.location.href = "login.jsp";
 				}

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cdwoo.common.CDLogger;
 import com.cdwoo.common.CDPage;
 import com.cdwoo.common.CDParam;
 import com.cdwoo.common.CDResult;
@@ -45,7 +44,7 @@ public class CompanyController {
 			this.companyService.addCompany(company);
 			return CDResult.success();
 		} catch (Exception e) {
-			CDLogger.error(e.toString());
+			e.printStackTrace();
 			return CDResult.fail("添加失败");
 		}
 	}
@@ -57,7 +56,7 @@ public class CompanyController {
 			this.companyService.updateCompanyStatus(id, status);
 			return CDResult.success();
 		} catch (Exception e) {
-			CDLogger.error(e.toString());
+			e.printStackTrace();
 			return CDResult.fail("内部错误");
 		}
 	}
@@ -76,7 +75,7 @@ public class CompanyController {
 			this.companyService.editCompany(company);
 			return CDResult.success();
 		} catch (Exception e) {
-			CDLogger.error(e.toString());
+			e.printStackTrace();
 			return CDResult.fail("内部错误");
 		}
 	}

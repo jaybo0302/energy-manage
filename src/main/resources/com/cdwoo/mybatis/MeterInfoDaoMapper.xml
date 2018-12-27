@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cdwoo.dao.MeterInfoDao">
+    <select id="queryMeterInfoByPage" resultType="java.util.Map">
+        select f25.*,date_format(f25.dateTime, '%Y-%m-%d %H:%i:%s') dateTimeStr, c.*,em.* 
+        from f25 
+        left join `electric-meter` em on f25.deviceNo = em.deviceNo and f25.companyId = em.companyId
+		left join company c on em.companyId = c.id        
+		where 1=1 
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         <if test="startDate != ''">
+             and f25.dateTime &gt;= #{startDate} 
+         </if>
+         <if test="endDate != ''">
+             and f25.dateTime &lt; #{endDate} 
+         </if>
+         <if test="devices > 0">
+             and f25.deviceNo = ${devices}
+         </if>
+         limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    <select id="getExportData" resultType="java.util.Map">
+        select f25.*,date_format(f25.dateTime, '%Y-%m-%d %H:%i:%s') dateTimeStr, c.*,em.* 
+        from f25 
+        left join `electric-meter` em on f25.deviceNo = em.deviceNo and f25.companyId = em.companyId
+		left join company c on em.companyId = c.id        
+		where 1=1 
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         <if test="startDate != ''">
+             and f25.dateTime &gt;= #{startDate} 
+         </if>
+         <if test="endDate != ''">
+             and f25.dateTime &lt; #{endDate} 
+         </if>
+         <if test="devices > 0">
+             and f25.deviceNo = ${devices}
+         </if>
+    </select>
+    <select id="queryMeterInfoCount" resultType="java.lang.Long">
+        select count(*) from f25
+        left join `electric-meter` em on f25.deviceNo = em.deviceNo and f25.companyId = em.companyId
+         where 1=1 
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         <if test="startDate != ''">
+             and f25.dateTime &gt;= #{startDate}
+         </if>
+         <if test="endDate != ''">
+             and f25.dateTime &lt; #{endDate} 
+         </if>
+         <if test="devices > 0">
+             and f25.deviceNo = ${devices}
+         </if>
+    </select>
+    
+    <select id="queryOfflineByPage" resultType="java.util.Map">
+        select ol.*,date_format(ol.createTime, '%Y-%m-%d %H:%i:%s') createTimeStr, c.*,em.*,(unix_timestamp(lastUpdateTime)-unix_timestamp(createTime)) offlineLong
+        from `offline-log` ol 
+        left join `electric-meter` em on ol.deviceNo = em.deviceNo and ol.companyId = em.companyId
+		left join company c on em.companyId = c.id
+		where 1=1
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         <if test="startDate != ''">
+             and ol.createTime &gt;= #{startDate} 
+         </if>
+         <if test="endDate != ''">
+             and ol.createTime &lt; #{endDate} 
+         </if>
+         limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    
+    <select id="queryOfflineCount" resultType="java.lang.Long">
+        select count(*)  from `offline-log` where 1=1
+         <if test="roleId > 0">
+             and companyId = ${companyId}
+         </if>
+    </select>
+    
+    <select id="queryStatisticMeterInfo" resultType="java.util.Map">
+        SELECT
+        	<if test="dateType==0">
+				date_format(f25.dateTime, '%H') t, 
+			</if>
+			<if test="dateType==1">
+				date_format(f25.dateTime, '%d') t,
+			</if>    
+			SUM(activePower)/count(*) activePowerAve,
+			SUM(reactivePower)/count(*) reactivePowerAve,
+			SUM(av)/count(*) aVAve,
+			SUM(bv)/count(*) bVAve,
+			SUM(cv)/count(*) cVAve,
+			SUM(aa)/count(*) aAAve,
+			SUM(ba)/count(*) bAAve,
+			SUM(ca)/count(*) cAAve
+		FROM
+			f25
+			LEFT JOIN `electric-meter` em ON f25.deviceNo = em.deviceNo and f25.companyId = em.companyId
+		WHERE
+			f25.dateTime >= #{start}
+		AND f25.datetime &lt; #{end}
+		<if test="deviceNo > 0">
+		    and f25.deviceNo = ${deviceNo}
+		</if>
+		and em.companyId = ${companyId}
+		<if test="dateType==0">
+		    GROUP BY
+			date_format(f25.dateTime, '%Y-%m-%d %H')
+		</if>
+		<if test="dateType==1">
+		    GROUP BY
+			date_format(f25.dateTime, '%Y-%m-%d') 
+		</if>
+		order by f25.datetime asc
+    </select>
+</mapper>

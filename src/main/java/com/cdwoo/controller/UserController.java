@@ -3,6 +3,7 @@
  */
 package com.cdwoo.controller;
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,13 @@ public class UserController {
 	
 	@ResponseBody
 	@RequestMapping("queryUserByPage")
-	public CDResult queryUserByPage(CDParam userParam, HttpServletRequest req) {
+	public CDResult queryUserByPage(CDParam param, HttpServletRequest req) {
 		if (req.getSession().getAttribute(Constants.USER_CONTEXT) == null) {
 			return CDResult.fail("login time out");
 		}
-		userParam.setCompanyId(((User)req.getSession().getAttribute(Constants.USER_CONTEXT)).getCompanyId());
-		userParam.setRoleId(((User)req.getSession().getAttribute(Constants.USER_CONTEXT)).getRoleId());
-		return CDResult.success(this.userService.queryUserByPage(userParam));
+		param.setCompanyId(((User)req.getSession().getAttribute(Constants.USER_CONTEXT)).getCompanyId());
+		param.setRoleId(((User)req.getSession().getAttribute(Constants.USER_CONTEXT)).getRoleId());
+		return CDResult.success(this.userService.queryUserByPage(param));
 	}
 	
 	@RequestMapping("getEditPage")
