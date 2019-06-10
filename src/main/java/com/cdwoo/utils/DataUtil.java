@@ -8,6 +8,11 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.poi.hssf.record.formula.Ptg;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cdwoo.common.CDLogger;
+
 import gnu.io.SerialPort;
 
 /**
@@ -15,8 +20,70 @@ import gnu.io.SerialPort;
  *
  */
 public class DataUtil {
-
-
+	public static Map<Integer, Integer> ptMap = new HashMap<>();
+	public static Map<Integer, Integer> ctMap = new HashMap<>();
+	static {
+		ptMap.put(1, 100);
+		ptMap.put(2, 100);
+		ptMap.put(3, 100);
+		ptMap.put(4, 100);
+		ptMap.put(5, 100);
+		ptMap.put(6, 100);
+		ptMap.put(7, 100);
+		ptMap.put(8, 100);
+		ptMap.put(9, 100);
+		ptMap.put(10, 100);
+		ptMap.put(11, 100);
+		ptMap.put(12, 100);
+		ptMap.put(13, 100);
+		ptMap.put(14, 100);
+		ptMap.put(15, 100);
+		ptMap.put(16, 100);
+		ptMap.put(17, 100);
+		ptMap.put(18, 100);
+		ptMap.put(19, 100);
+		ptMap.put(20, 100);
+		ptMap.put(21, 100);
+		ptMap.put(22, 100);
+		ptMap.put(23, 100);
+		ptMap.put(24, 100);
+		ptMap.put(25, 100);
+		ptMap.put(26, 100);
+		ptMap.put(27, 100);
+		ptMap.put(28, 100);
+		ptMap.put(29, 100);
+		
+		ctMap.put(1, 200);
+		ctMap.put(2, 60);
+		ctMap.put(3, 60);
+		ctMap.put(4, 60);
+		ctMap.put(5, 60);
+		ctMap.put(6, 60);
+		ctMap.put(7, 60);
+		ctMap.put(8, 60);
+		ctMap.put(9, 60);
+		ctMap.put(10, 60);
+		ctMap.put(11, 60);
+		ctMap.put(12, 60);
+		ctMap.put(13, 60);
+		ctMap.put(14, 60);
+		ctMap.put(15, 60);
+		ctMap.put(16, 60);
+		ctMap.put(17, 60);
+		ctMap.put(18, 60);
+		ctMap.put(19, 60);
+		ctMap.put(20, 60);
+		ctMap.put(21, 120);
+		ctMap.put(22, 120);
+		ctMap.put(23, 120);
+		ctMap.put(24, 120);
+		ctMap.put(25, 120);
+		ctMap.put(26, 120);
+		ctMap.put(27, 120);
+		ctMap.put(28, 120);
+		ctMap.put(29, 320);
+	}
+	
 	/**
 	 * 前面补0
 	 * @param args
@@ -120,7 +187,7 @@ public class DataUtil {
 	
 	public static byte[] hex2byte(String hex) {
         String digital = "0123456789ABCDEF";
-        String hex1 = hex.replace(" ", "");
+        String hex1 = hex.replace(" ", "").toUpperCase();
         char[] hex2char = hex1.toCharArray();
         byte[] bytes = new byte[hex1.length() / 2];
         byte temp;
@@ -145,8 +212,17 @@ public class DataUtil {
     	String s = sb.toString();
     	return s;
     }
-	
-	
+	 public static byte[] toBytes(String str) {
+         if (str == null || str.trim().equals("")) {
+              return new byte[0];
+         }
+         byte[] bytes = new byte[str.length() / 2];
+         for (int i = 0; i < str.length() / 2; i++) {
+             String subStr = str.substring(i * 2, i * 2 + 2);
+             bytes[i] = (byte) Integer.parseInt(subStr, 16);
+         }
+         return bytes;
+    }
 	/**
 	 * 帧校验和函数
 	 * @param frames
@@ -288,71 +364,178 @@ public class DataUtil {
 		EE EE EE EE EE 60 16
 		 */
 		
-		String c = datas[6];
-		String a1 = datas[8] + datas[7];
-		int a2 = hex2A2(new String[] {datas[9], datas[10]});
-		int a3 = hex2A3(datas[11]);
-		String afn = datas[12];
-		String seq = datas[13];
-		int[] seqBin = getSEQBin(seq);
-		int tpv = seqBin[0];
-		int fin = seqBin[1];
-		int con = seqBin[2];
-		int rseq = seqBin[3];
-		int da1 = Integer.parseInt(datas[14], 16);
-		int da2 = Integer.parseInt(datas[15], 16);
-		int dt1 = Integer.parseInt(datas[16], 16);
-		int dt2 = Integer.parseInt(datas[17], 16);
-		int fn = da2*8+ Integer.toBinaryString(da1).length();
-		int pn = (dt2-1)*8+ Integer.toBinaryString(dt1).length();
-		String dateTime = "20" + datas[22] + "-" + datas[21] + "-" + datas[20] + " " + datas[19] + ":" + datas[18];
+//		String c = datas[6];
+//		String a1 = datas[8] + datas[7];
+//		int a2 = hex2A2(new String[] {datas[9], datas[10]});
+//		int a3 = hex2A3(datas[11]);
+//		String afn = datas[12];
+//		String seq = datas[13];
+//		int[] seqBin = getSEQBin(seq);
+//		int tpv = seqBin[0];
+//		int fin = seqBin[1];
+//		int con = seqBin[2];
+//		int rseq = seqBin[3];
+//		int da1 = Integer.parseInt(datas[14], 16);
+//		int da2 = Integer.parseInt(datas[15], 16);
+//		int dt1 = Integer.parseInt(datas[16], 16);
+//		int dt2 = Integer.parseInt(datas[17], 16);
+//		int fn = da2*8+ Integer.toBinaryString(da1).length();
+//		int pn = (dt2-1)*8+ Integer.toBinaryString(dt1).length();
+		String dateTime = "20" + datas[4] + "-" + datas[3] + "-" + datas[2] + " " + datas[1] + ":" + datas[0];
 		
 		//当前总有功功率 
-		String activePowerStr = datas[25] + "." + datas[24] + datas[23];
+		String activePowerStr = datas[7] + "." + datas[6] + datas[5];
+		if (activePowerStr.toLowerCase().contains("e")) {
+			activePowerStr = "0";
+		} else {
+			activePowerStr = String.valueOf(Float.parseFloat(activePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前A相有功功率
-		String aActivePowerStr = datas[28] + "." + datas[27] + datas[26];
+		String aActivePowerStr = datas[10] + "." + datas[9] + datas[8];
+		if (aActivePowerStr.toLowerCase().contains("e")) {
+			aActivePowerStr = "0";
+		} else {
+			aActivePowerStr = String.valueOf(Float.parseFloat(aActivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前B相有功功率
-		String bActivePowerStr = datas[31] + "." + datas[30] + datas[29];
+		String bActivePowerStr = datas[13] + "." + datas[12] + datas[11];
+		if (bActivePowerStr.toLowerCase().contains("e")) {
+			bActivePowerStr = "0";
+		} else {
+			bActivePowerStr = String.valueOf(Float.parseFloat(bActivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前C相有功功率
-		String cActivePowerStr = datas[34] + "." + datas[33] + datas[32];
+		String cActivePowerStr = datas[16] + "." + datas[15] + datas[14];
+		if (cActivePowerStr.toLowerCase().contains("e")) {
+			cActivePowerStr = "0";
+		} else {
+			cActivePowerStr = String.valueOf(Float.parseFloat(cActivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前总无功功率 
-		String reactivePowerStr = datas[37] + "." + datas[36] + datas[35];
+		String reactivePowerStr = datas[19] + "." + datas[18] + datas[17];
+		if (reactivePowerStr.toLowerCase().contains("e")) {
+			reactivePowerStr = "0";
+		} else {
+			reactivePowerStr = String.valueOf(Float.parseFloat(reactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前A相无功功率
-		String aReactivePowerStr = datas[40] + "." + datas[39] + datas[38];
+		String aReactivePowerStr = datas[22] + "." + datas[21] + datas[20];
+		if (aReactivePowerStr.toLowerCase().contains("e")) {
+			aReactivePowerStr = "0";
+		} else {
+			aReactivePowerStr = String.valueOf(Float.parseFloat(aReactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前B相无功功率
-		String bReactivePowerStr = datas[43] + "." + datas[42] + datas[41];
+		String bReactivePowerStr = datas[25] + "." + datas[24] + datas[23];
+		if (bReactivePowerStr.toLowerCase().contains("e")) {
+			bReactivePowerStr = "0";
+		} else {
+			bReactivePowerStr = String.valueOf(Float.parseFloat(bReactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前C相无功功率
-		String cReactivePowerStr = datas[46] + "." + datas[45] + datas[44];
+		String cReactivePowerStr = datas[28] + "." + datas[27] + datas[26];
+		if (cReactivePowerStr.toLowerCase().contains("e")) {
+			cReactivePowerStr = "0";
+		} else {
+			cReactivePowerStr = String.valueOf(Float.parseFloat(cReactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前总功率因数 
-		String powerFactorStr = datas[48] + datas[47].substring(0, 1) + "." + datas[47].substring(1, 2);
+		String powerFactorStr = datas[30] + datas[29].substring(0, 1) + "." + datas[29].substring(1, 2);
+		if (powerFactorStr.toLowerCase().contains("e")) {
+			powerFactorStr = "0";
+		}
 		//当前A相功率因数
-		String aPowerFactorStr = datas[50] + datas[49].substring(0, 1) + "." + datas[49].substring(1, 2);
+		String aPowerFactorStr = datas[32] + datas[31].substring(0, 1) + "." + datas[31].substring(1, 2);
+		if (aPowerFactorStr.toLowerCase().contains("e")) {
+			aPowerFactorStr = "0";
+		}
 		//当前B相功率因数
-		String bPowerFactorStr = datas[52] + datas[51].substring(0, 1) + "." + datas[51].substring(1, 2);
+		String bPowerFactorStr = datas[34] + datas[33].substring(0, 1) + "." + datas[33].substring(1, 2);
+		if (bPowerFactorStr.toLowerCase().contains("e")) {
+			bPowerFactorStr = "0";
+		}
 		//当前C相功率因数
-		String cPowerFactorStr = datas[54] + datas[53].substring(0, 1) + "." + datas[53].substring(1, 2);
+		String cPowerFactorStr = datas[36] + datas[35].substring(0, 1) + "." + datas[35].substring(1, 2);
+		if (cPowerFactorStr.toLowerCase().contains("e")) {
+			cPowerFactorStr = "0";
+		}
 		//当前A相电压    
-		String aVStr = datas[56] + datas[55].substring(0, 1) + "." + datas[55].substring(1, 2);
+		String aVStr = datas[38] + datas[37].substring(0, 1) + "." + datas[37].substring(1, 2);
+		if (aVStr.toLowerCase().contains("e")) {
+			aVStr = "0";
+		} else {
+			aVStr = String.valueOf(Float.parseFloat(aVStr)*ptMap.get(deviceNo));
+		}
 		//当前B相电压    
-		String bVStr = datas[58] + datas[57].substring(0, 1) + "." + datas[57].substring(1, 2);
+		String bVStr = datas[40] + datas[39].substring(0, 1) + "." + datas[39].substring(1, 2);
+		if (bVStr.toLowerCase().contains("e")) {
+			bVStr = "0";
+		} else {
+			bVStr = String.valueOf(Float.parseFloat(bVStr)*ptMap.get(deviceNo));
+		}
 		//当前C相电压    
-		String cVStr = datas[60] + datas[59].substring(0, 1) + "." + datas[59].substring(1, 2);
+		String cVStr = datas[42] + datas[41].substring(0, 1) + "." + datas[41].substring(1, 2);
+		if (cVStr.toLowerCase().contains("e")) {
+			cVStr = "0";
+		} else {
+			cVStr = String.valueOf(Float.parseFloat(cVStr)*ptMap.get(deviceNo));
+		}
 		//当前A相电流    
-		String aAStr = datas[63] + datas[62].substring(0, 1) + "." + datas[62].substring(1, 2) + datas[61];
+		String aAStr = datas[45] + datas[44].substring(0, 1) + "." + datas[44].substring(1, 2) + datas[43];
+		if (aAStr.toLowerCase().contains("e")) {
+			aAStr = "0";
+		} else {
+			aAStr = String.valueOf(Float.parseFloat(aAStr)*ctMap.get(deviceNo));
+		}
 		//当前B相电流    
-		String bAStr = datas[66] + datas[65].substring(0, 1) + "." + datas[65].substring(1, 2) + datas[64];
+		String bAStr = datas[48] + datas[47].substring(0, 1) + "." + datas[47].substring(1, 2) + datas[46];
+		if (bAStr.toLowerCase().contains("e")) {
+			bAStr = "0";
+		} else {
+			bAStr = String.valueOf(Float.parseFloat(bAStr)*ctMap.get(deviceNo));
+		}
 		//当前C相电流    
-		String cAStr = datas[69] + datas[68].substring(0, 1) + "." + datas[68].substring(1, 2) + datas[67];
+		String cAStr = datas[51] + datas[50].substring(0, 1) + "." + datas[50].substring(1, 2) + datas[49];
+		if (cAStr.toLowerCase().contains("e")) {
+			cAStr = "0";
+		} else {
+			cAStr = String.valueOf(Float.parseFloat(cAStr)*ctMap.get(deviceNo));
+		}
 		//当前零序电流   
-		String zeroSequenceCurrentAStr = datas[72] + datas[71].substring(0, 1) + "." + datas[71].substring(1, 2) + datas[70];
+		String zeroSequenceCurrentAStr = datas[54] + datas[53].substring(0, 1) + "." + datas[53].substring(1, 2) + datas[52];
+		if (zeroSequenceCurrentAStr.toLowerCase().contains("e")) {
+			zeroSequenceCurrentAStr = "0";
+		} else {
+			zeroSequenceCurrentAStr = String.valueOf(Float.parseFloat(zeroSequenceCurrentAStr)*ctMap.get(deviceNo));
+		}
 		//当前总视在功率 
-		String apparentPowerStr = datas[75] + "." + datas[74] + datas[73];
+		String apparentPowerStr = datas[57] + "." + datas[56] + datas[55];
+		if (apparentPowerStr.toLowerCase().contains("e")) {
+			apparentPowerStr = "0";
+		} else {
+			apparentPowerStr = String.valueOf(Float.parseFloat(apparentPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前A相视在功率
-		String apparentAPowerStr = datas[78] + "." + datas[77] + datas[76];
+		String apparentAPowerStr = datas[60] + "." + datas[59] + datas[58];
+		if (apparentAPowerStr.toLowerCase().contains("e")) {
+			apparentAPowerStr = "0";
+		} else {
+			apparentAPowerStr = String.valueOf(Float.parseFloat(apparentAPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前B相视在功率
-		String apparentBPowerStr = datas[81] + "." + datas[80] + datas[79];
+		String apparentBPowerStr = datas[63] + "." + datas[62] + datas[61];
+		if (apparentBPowerStr.toLowerCase().contains("e")) {
+			apparentBPowerStr = "0";
+		} else {
+			apparentBPowerStr = String.valueOf(Float.parseFloat(apparentBPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		//当前C相视在功率
-		String apparentCPowerStr = datas[84] + "." + datas[83] + datas[82];
+		String apparentCPowerStr = datas[66] + "." + datas[65] + datas[64];
+		if (apparentCPowerStr.toLowerCase().contains("e")) {
+			apparentCPowerStr = "0";
+		} else {
+			apparentCPowerStr = String.valueOf(Float.parseFloat(apparentCPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
+		}
 		result.put("dateTime", dateTime);
 		result.put("activePower", activePowerStr);
 		result.put("aActivePower", aActivePowerStr);
@@ -378,7 +561,7 @@ public class DataUtil {
 		result.put("apparentBPower", apparentBPowerStr);
 		result.put("apparentCPower", apparentCPowerStr);
 		result.put("deviceNo", deviceNo);
-		result.put("companyId", 1);
+		result.put("companyId", 2);
 		DBUtil.save(result, "f25");
 	}
 	
@@ -471,8 +654,10 @@ public class DataUtil {
 	 * F33 当前正向有/无功电能示值、一/四象限无功电能示值（总、费率1~M） 
 	 * @param datas
 	 * @return
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public static void f33(String[] datas){
+	public static void f33(String[] datas, int deviceNo) throws ClassNotFoundException, SQLException{
 		Map<String, Object> result = new HashMap<>();
 		/**
 		 * 68 3E 01 3E 01 68 88 10 03 03 00 F2 0C 7C 01 01 
@@ -482,135 +667,110 @@ public class DataUtil {
 		EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE EE 
 		EE EE EE EE EE 60 16
 		 */
-		if (!((datas.length - 8) == getLength(new String[] {datas[1],datas[2]}))) {
-			return;
-		}
-		String [] datasCheck = new String[datas.length - 8];
-		for (int i=0;i<datas.length - 8;i++) {
-			datasCheck[i] = datas[i+6];
-		}
-		if (!datas[datas.length - 2].toUpperCase().equals(frameCheck(datasCheck).toUpperCase())) {
-			return;
-		}
-		String c = datas[6];
-		String a1 = datas[8] + datas[7];
-		int a2 = hex2A2(new String[] {datas[9], datas[10]});
-		int a3 = hex2A3(datas[11]);
-		String afn = datas[12];
-		String seq = datas[13];
-		int[] seqBin = getSEQBin(seq);
-		int tpv = seqBin[0];
-		int fin = seqBin[1];
-		int con = seqBin[2];
-		int rseq = seqBin[3];
-		int da1 = Integer.parseInt(datas[14], 16);
-		int da2 = Integer.parseInt(datas[15], 16);
-		int dt1 = Integer.parseInt(datas[16], 16);
-		int dt2 = Integer.parseInt(datas[17], 16);
-		int fn = da2*8+ Integer.toBinaryString(da1).length();
-		int pn = (dt2-1)*8+ Integer.toBinaryString(dt1).length();
-		String dateTime = "20" + datas[22] + "-" + datas[21] + "-" + datas[20] + " " + datas[19] + ":" + datas[18];
-		int rate = Integer.parseInt(datas[23], 16);
+		String dateTime = "20" + datas[4] + "-" + datas[3] + "-" + datas[2] + " " + datas[1] + ":" + datas[0];
+		int rate = Integer.parseInt(datas[5], 16);
 		if (dateTime.toLowerCase().contains("e")) {
 			return;
 		}
 		//当前正向有功总电能示值     
-		String positiveActivePowerIndicationStr = datas[28] + datas[27] + datas[26] + "." + datas[25] + datas[24];
+		String positiveActivePowerIndicationStr = datas[10] + datas[9] + datas[8] + "." + datas[7] + datas[6];
 		if (positiveActivePowerIndicationStr.toLowerCase().contains("e")) {
 			positiveActivePowerIndicationStr = "0";
+		} else {
+			positiveActivePowerIndicationStr = String.valueOf(Float.parseFloat(positiveActivePowerIndicationStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前费率1正向有功总电能示值
-		String rate1PositiveActivePowerIndicationStr = datas[33] + datas[32] + datas[31] + "." + datas[30] + datas[29];
+		String rate1PositiveActivePowerIndicationStr = datas[15] + datas[14] + datas[13] + "." + datas[12] + datas[11];
 		if (rate1PositiveActivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate1PositiveActivePowerIndicationStr = "0";
 		}
 		//当前费率2正向有功总电能示值
-		String rate2PositiveActivePowerIndicationStr = datas[38] + datas[37] + datas[36] + "." + datas[35] + datas[34];
+		String rate2PositiveActivePowerIndicationStr = datas[20] + datas[19] + datas[18] + "." + datas[17] + datas[16];
 		if (rate2PositiveActivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate2PositiveActivePowerIndicationStr = "0";
 		}
 		//当前费率3正向有功总电能示值
-		String rate3PositiveActivePowerIndicationStr = datas[43] + datas[42] + datas[41] + "." + datas[40] + datas[39];
+		String rate3PositiveActivePowerIndicationStr = datas[25] + datas[24] + datas[23] + "." + datas[22] + datas[21];
 		if (rate3PositiveActivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate3PositiveActivePowerIndicationStr = "0";
 		}
 		//当前费率4正向有功总电能示值
-		String rate4PositiveActivePowerIndicationStr = datas[48] + datas[47] + datas[46] + "." + datas[45] + datas[44];
+		String rate4PositiveActivePowerIndicationStr = datas[30] + datas[29] + datas[28] + "." + datas[27] + datas[26];
 		if (rate4PositiveActivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate4PositiveActivePowerIndicationStr = "0";
 		}
 		//当前正向无功（组合无功1）总电能示值     
-		String positiveReactivePowerIndicationStr  = datas[52] + datas[51] + datas[50] + "." + datas[49];
+		String positiveReactivePowerIndicationStr  = datas[34] + datas[33] + datas[32] + "." + datas[31];
 		if (positiveReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			positiveReactivePowerIndicationStr = "0";
 		}
 		//当前费率1正向无功（组合无功1）总电能示值
-		String rate1PositiveReactivePowerIndicationStr  = datas[56] + datas[55] + datas[54] + "." + datas[53];
+		String rate1PositiveReactivePowerIndicationStr  = datas[38] + datas[37] + datas[36] + "." + datas[35];
 		if (rate1PositiveReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate1PositiveReactivePowerIndicationStr = "0";
 		}
 		//当前费率2正向无功（组合无功1）总电能示值
-		String rate2PositiveReactivePowerIndicationStr  = datas[60] + datas[59] + datas[58] + "." + datas[57];
+		String rate2PositiveReactivePowerIndicationStr  = datas[42] + datas[41] + datas[40] + "." + datas[39];
 		if (rate2PositiveReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate2PositiveReactivePowerIndicationStr = "0";
 		}
 		//当前费率3正向无功（组合无功1）总电能示值
-		String rate3PositiveReactivePowerIndicationStr  = datas[61] + datas[62] + datas[63] + "." + datas[64];
+		String rate3PositiveReactivePowerIndicationStr  = datas[46] + datas[45] + datas[44] + "." + datas[43];
 		if (rate3PositiveReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate3PositiveReactivePowerIndicationStr = "0";
 		}
 		//当前费率4正向无功（组合无功1）总电能示值
-		String rate4PositiveReactivePowerIndicationStr  = datas[68] + datas[67] + datas[66] + "." + datas[65];
+		String rate4PositiveReactivePowerIndicationStr  = datas[50] + datas[49] + datas[48] + "." + datas[47];
 		if (rate4PositiveReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate4PositiveReactivePowerIndicationStr = "0";
 		}
 		//当前一象限无功总电能示值     
-		String firstQuadrantReactivePowerIndicationStr = datas[72] + datas[71] + datas[70] + "." + datas[69];
-		if (positiveActivePowerIndicationStr.toLowerCase().contains("e")) {
-			positiveActivePowerIndicationStr = "0";
+		String firstQuadrantReactivePowerIndicationStr = datas[54] + datas[53] + datas[52] + "." + datas[51];
+		if (firstQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
+			firstQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前一象限费率1无功总电能示值
-		String rate1FirstQuadrantReactivePowerIndicationStr = datas[76] + datas[75] + datas[74] + "." + datas[73];
+		String rate1FirstQuadrantReactivePowerIndicationStr = datas[58] + datas[57] + datas[56] + "." + datas[55];
 		if (rate1FirstQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate1FirstQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前一象限费率2无功总电能示值
-		String rate2FirstQuadrantReactivePowerIndicationStr = datas[80] + datas[79] + datas[78] + "." + datas[77];
+		String rate2FirstQuadrantReactivePowerIndicationStr = datas[62] + datas[61] + datas[60] + "." + datas[59];
 		if (rate2FirstQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate2FirstQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前一象限费率3无功总电能示值
-		String rate3FirstQuadrantReactivePowerIndicationStr = datas[84] + datas[83] + datas[82] + "." + datas[81];
+		String rate3FirstQuadrantReactivePowerIndicationStr = datas[66] + datas[65] + datas[64] + "." + datas[63];
 		if (rate3FirstQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate3FirstQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前一象限费率4无功总电能示值
-		String rate4FirstQuadrantReactivePowerIndicationStr = datas[88] + datas[87] + datas[86] + "." + datas[85];
+		String rate4FirstQuadrantReactivePowerIndicationStr = datas[70] + datas[69] + datas[68] + "." + datas[67];
 		if (rate4FirstQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate4FirstQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前四象限无功总电能示值     
-		String fourthQuadrantReactivePowerIndicationStr = datas[92] + datas[91] + datas[90] + "." + datas[89];
+		String fourthQuadrantReactivePowerIndicationStr = datas[74] + datas[73] + datas[72] + "." + datas[71];
 		if (fourthQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			fourthQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前四象限费率1无功总电能示值
-		String rate1FourthQuadrantReactivePowerIndicationStr = datas[96] + datas[95] + datas[94] + "." + datas[93];
+		String rate1FourthQuadrantReactivePowerIndicationStr = datas[78] + datas[77] + datas[76] + "." + datas[75];
 		if (rate1FourthQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate1FourthQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前四象限费率2无功总电能示值
-		String rate2FourthQuadrantReactivePowerIndicationStr = datas[100] + datas[99] + datas[98] + "." + datas[97];
+		String rate2FourthQuadrantReactivePowerIndicationStr = datas[82] + datas[81] + datas[80] + "." + datas[79];
 		if (rate2FourthQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate2FourthQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前四象限费率3无功总电能示值
-		String rate3FourthQuadrantReactivePowerIndicationStr = datas[104] + datas[103] + datas[102] + "." + datas[101];
+		String rate3FourthQuadrantReactivePowerIndicationStr = datas[86] + datas[85] + datas[84] + "." + datas[83];
 		if (rate3FourthQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate3FourthQuadrantReactivePowerIndicationStr = "0";
 		}
 		//当前四象限费率4无功总电能示值
-		String rate4FourthQuadrantReactivePowerIndicationStr = datas[108] + datas[107] + datas[106] + "." + datas[105];
+		String rate4FourthQuadrantReactivePowerIndicationStr = datas[90] + datas[89] + datas[88] + "." + datas[87];
 		if (rate4FourthQuadrantReactivePowerIndicationStr.toLowerCase().contains("e")) {
 			rate4FourthQuadrantReactivePowerIndicationStr = "0";
 		}
@@ -636,6 +796,9 @@ public class DataUtil {
 		result.put("rate2FourthQuadrantReactivePowerIndication", rate2FourthQuadrantReactivePowerIndicationStr);
 		result.put("rate3FourthQuadrantReactivePowerIndication", rate3FourthQuadrantReactivePowerIndicationStr);
 		result.put("rate4FourthQuadrantReactivePowerIndication", rate4FourthQuadrantReactivePowerIndicationStr);
+		result.put("deviceNo", deviceNo);
+		result.put("companyId", 2);
+		DBUtil.save(result, "f33");
 	}
 	
 	
@@ -986,7 +1149,7 @@ public class DataUtil {
 	public static String getOrder(Map<String, Object> params) {
 		int orderNo = Integer.parseInt(String.valueOf(params.get("orderNo")));
 		int msa = Integer.parseInt(String.valueOf(params.get("msa")));
-		int deviceNo = Integer.parseInt(String.valueOf(params.get("deviceNo")));
+		int terminalNo = Integer.parseInt(String.valueOf(params.get("terminalNo")));
 		int no = Integer.parseInt(String.valueOf(params.get("no")));
 		int length = Integer.parseInt(String.valueOf(params.get("length")));
 		int dir = Integer.parseInt(String.valueOf(params.get("dir")));
@@ -999,21 +1162,22 @@ public class DataUtil {
 		int fin = Integer.parseInt(String.valueOf(params.get("fin")));
 		int con = Integer.parseInt(String.valueOf(params.get("con")));
 		int pseq = Integer.parseInt(String.valueOf(params.get("pseq")));
-		String anf = String.valueOf(params.get("anf"));
+		String zcode = String.valueOf(params.get("zcode"));
+		String afn = String.valueOf(params.get("afn"));
 		StringBuffer sb = new StringBuffer(512);
 		StringBuffer sbCheck = new StringBuffer(512);
 		sb.append("68 ");
 		sb.append(length2Hex(length) + " " + length2Hex(length) + " 68 ");
 		sb.append(getControlHex(dir, prm, fcb, fcv, funcCode) + " ");
 		sbCheck.append(getControlHex(dir, prm, fcb, fcv, funcCode) + " ");
-		sb.append("10 03 ");
-		sbCheck.append("10 03 ");
-		sb.append(getA2Hex(deviceNo) + " ");
-		sbCheck.append(getA2Hex(deviceNo) + " ");
+		sb.append(zcode.substring(2, 4) + " " + zcode.substring(0, 2) + " ");
+		sbCheck.append(zcode.substring(2, 4) + " " + zcode.substring(0, 2) + " ");
+		sb.append(getA2Hex(terminalNo) + " ");
+		sbCheck.append(getA2Hex(terminalNo) + " ");
 		sb.append(getA3Hex(msa, 0) + " ");
 		sbCheck.append(getA3Hex(msa, 0) + " ");
-		sb.append(getDat(no,orderNo,tpv,fir,fin,con,pseq,anf) + " ");
-		sbCheck.append(getDat(no,orderNo,tpv,fir,fin,con,pseq,anf) + " ");
+		sb.append(getDat(no,orderNo,tpv,fir,fin,con,pseq,afn) + " ");
+		sbCheck.append(getDat(no,orderNo,tpv,fir,fin,con,pseq,afn) + " ");
 		sb.append(frameCheck(sbCheck.toString().split(" ")) + " 16");
 		return sb.toString();
 	}
@@ -1029,6 +1193,9 @@ public class DataUtil {
 			da1Hex = add02front(da1Hex, 1);
 		}
 		String da2Hex = Integer.toHexString(no/8+1);
+		if (no == 0) {
+			da2Hex = "00";
+		}
 		if (da2Hex.length() <2) {
 			da2Hex = add02front(da2Hex, 1);
 		}
@@ -1058,4 +1225,28 @@ public class DataUtil {
     	String s = sb.toString();
     	return s;
     }
+	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		Map<String, Object> paramsHeart = new HashMap<>();
+		paramsHeart.put("orderNo", 1);
+		paramsHeart.put("msa", 121);
+		paramsHeart.put("zcode", "0310");
+		paramsHeart.put("terminalNo", Integer.parseInt("1"));
+		paramsHeart.put("no", 0);
+		paramsHeart.put("length", 12);
+		paramsHeart.put("dir", 0);
+		paramsHeart.put("prm", 1);
+		paramsHeart.put("fcb", 0);
+		paramsHeart.put("fcv", 0);
+		paramsHeart.put("funcCode", 0);
+		paramsHeart.put("tpv", 0);
+		paramsHeart.put("fir", 1);
+		paramsHeart.put("fin", 1);
+		paramsHeart.put("con", 0);
+		paramsHeart.put("pseq", 0);
+		paramsHeart.put("afn", "00");
+		System.out.println(getOrder(paramsHeart));
+		System.out.println(hex2String(toBytes(getOrder(paramsHeart).replaceAll(" ", ""))));
+		System.out.println(hex2String(hex2byte("68 32 00 32 00 68 40 10 03 01 00 f2 00 60 00 00 01 00 A7 16")));
+	}
 }

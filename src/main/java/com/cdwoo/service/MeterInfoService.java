@@ -18,4 +18,6 @@ public interface MeterInfoService {
 
 	List<Map<String, Object>> getExportData(CDParam param);
 
+	CDPage queryRealtimeByPage(MeterInfoParam param);
+
 }

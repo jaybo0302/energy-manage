@@ -20,6 +20,7 @@
          <if test="devices > 0">
              and f25.deviceNo = ${devices}
          </if>
+         order by f25.datetime desc 
          limit ${pageSize} offset ${pageNo*pageSize-pageSize};
     </select>
     <select id="getExportData" resultType="java.util.Map">
@@ -119,5 +120,62 @@
 			date_format(f25.dateTime, '%Y-%m-%d') 
 		</if>
 		order by f25.datetime asc
+    </select>
+    
+    <select id="queryRealtimeByPage" resultType="java.util.Map">
+    	SELECT f25LastUpdate.*,f33LastUpdate.positiveActivePowerIndication,
+    	date_format(f25LastUpdate.dateTime, '%Y-%m-%d %H:%i:%s') dateTimeStr, c.*,em.* from (SELECT
+			f25.*
+		FROM
+			(
+				SELECT
+					MAX(dateTime) dateTime,
+					f25.deviceNo,
+					f25.companyId
+				FROM
+					f25
+				where 1 = 1
+				<if test="roleId > 0">
+		            and f25.companyId = ${companyId}
+		        </if>
+				GROUP BY
+					companyId,
+					deviceNo
+			) a
+		LEFT JOIN f25 ON f25.dateTime = a.datetime
+		AND f25.deviceNo = a.deviceNo
+		AND f25.companyId = a.companyId
+		group by a.companyId,a.deviceNo,a.dateTime) f25LastUpdate
+		LEFT JOIN 
+		(SELECT
+			f33.*
+		FROM
+			(
+				SELECT
+					MAX(dateTime) dateTime,
+					f33.deviceNo,
+					f33.companyId
+				FROM
+					f33
+				where 1 = 1
+				<if test="roleId > 0">
+		            and f33.companyId = ${companyId}
+		        </if>
+				GROUP BY
+					companyId,
+					deviceNo
+			) a
+		LEFT JOIN f33 ON f33.dateTime = a.datetime
+		AND f33.deviceNo = a.deviceNo
+		AND f33.companyId = a.companyId
+		where 1=1 
+		group by a.companyId,a.deviceNo,a.dateTime) f33LastUpdate on f25LastUpdate.deviceNo = f33LastUpdate.deviceNo and f25LastUpdate.companyId = f33LastUpdate.companyId
+    	left join `electric-meter` em on f25LastUpdate.deviceNo = em.deviceNo and f25LastUpdate.companyId = em.companyId
+		left join company c on em.companyId = c.id
+    	limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    
+    <select id="queryRealtimeCount" resultType="java.lang.Long">
+    	select count(*) from (select * from f25 group by companyId,deviceNo) a
     </select>
 </mapper>

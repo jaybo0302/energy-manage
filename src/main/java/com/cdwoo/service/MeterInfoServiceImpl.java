@@ -52,4 +52,15 @@ public class MeterInfoServiceImpl implements MeterInfoService {
 	public List<Map<String, Object>> getExportData(CDParam param) {
 		return meterInfoDao.getExportData(param);
 	}
+
+	@Override
+	public CDPage queryRealtimeByPage(MeterInfoParam param) {
+		CDPage page = new CDPage();
+		page.setCount(param.getPageSize());
+		page.setCurrentPage(param.getPageNo());
+		page.setTotalCount(meterInfoDao.queryRealtimeCount(param));
+		List<Object> result= meterInfoDao.queryRealtimeByPage(param);
+		page.setData(result);
+		return page;
+	}
 }

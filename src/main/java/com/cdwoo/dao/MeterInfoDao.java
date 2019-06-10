@@ -24,4 +24,6 @@ public interface MeterInfoDao {
 	long queryOfflineCount(CDParam param);
 	List<Object> queryOfflineByPage(CDParam param);
 	List<Map<String, Object>> getExportData(CDParam param);
+	long queryRealtimeCount(MeterInfoParam param);
+	List<Object> queryRealtimeByPage(MeterInfoParam param);
 }

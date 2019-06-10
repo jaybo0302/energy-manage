@@ -16,7 +16,6 @@
          <if test="roleId > 0">
              and em.companyId = ${companyId}
          </if>
-         limit ${pageSize} offset ${pageNo*pageSize-pageSize};
     </select>
     <insert id="addElectricmeter">
         insert into `electric-meter` (deviceNo, companyId,deviceName,position,status,port)

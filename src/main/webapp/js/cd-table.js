@@ -1,5 +1,6 @@
 //当前页面标志，方便刷新
 var currentNo;
+var tableQueryUrl;
 /**
  * 表格刷新方法
  * @param pageNo 页码

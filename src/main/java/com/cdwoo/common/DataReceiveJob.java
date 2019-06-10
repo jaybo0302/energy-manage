@@ -96,14 +96,14 @@ public class DataReceiveJob {
 				
 				String[] datas = DataUtil.hex2String(b, b.length).split(" ");
 				if (!((datas.length - 8) == DataUtil.getLength(new String[] {datas[1],datas[2]}))) {
-					return;
+					continue;
 				}
 				String [] datasCheck = new String[datas.length - 8];
 				for (int i=0;i<datas.length - 8;i++) {
 					datasCheck[i] = datas[i+6];
 				}
 				if (!datas[datas.length - 2].toUpperCase().equals(DataUtil.frameCheck(datasCheck).toUpperCase())) {
-					return;
+					continue;
 				}
 				DataUtil.f25(DataUtil.hex2String(b, b.length).toUpperCase().replaceAll("EE", "00").split(" "), deviceNo);
 			}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cdwoo.dao.MeterPowerDao">
+    <select id="queryMeterpowerByPage" resultType="java.util.Map">
+        select f33.*,date_format(f33.dateTime, '%Y-%m-%d %H:%i:%s') dateTimeStr, c.*,em.* 
+        from f33 
+        left join `electric-meter` em on f33.deviceNo = em.deviceNo and f33.companyId = em.companyId
+		left join company c on em.companyId = c.id        
+		where 1=1 
+         <if test="roleId > 0">
+             and f33.companyId = ${companyId}
+         </if>
+         <if test="startDate != ''">
+             and f33.dateTime &gt;= #{startDate} 
+         </if>
+         <if test="endDate != ''">
+             and f33.dateTime &lt; #{endDate} 
+         </if>
+         <if test="devices > 0">
+             and f33.deviceNo = ${devices}
+         </if>
+         order by f33.datetime desc 
+         limit ${pageSize} offset ${pageNo*pageSize-pageSize};
+    </select>
+    <select id="getExportData" resultType="java.util.Map">
+        select f33.*,date_format(f33.dateTime, '%Y-%m-%d %H:%i:%s') dateTimeStr, c.*,em.* 
+        from f33 
+        left join `electric-meter` em on f25.deviceNo = em.deviceNo and f33.companyId = em.companyId
+		left join company c on em.companyId = c.id        
+		where 1=1 
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         <if test="startDate != ''">
+             and f33.dateTime &gt;= #{startDate} 
+         </if>
+         <if test="endDate != ''">
+             and f33.dateTime &lt; #{endDate} 
+         </if>
+         <if test="devices > 0">
+             and f33.deviceNo = ${devices}
+         </if>
+    </select>
+    <select id="queryMeterpowerCount" resultType="java.lang.Long">
+        select count(*) from f33
+        left join `electric-meter` em on f33.deviceNo = em.deviceNo and f33.companyId = em.companyId
+         where 1=1 
+         <if test="roleId > 0">
+             and em.companyId = ${companyId}
+         </if>
+         <if test="startDate != ''">
+             and f33.dateTime &gt;= #{startDate}
+         </if>
+         <if test="endDate != ''">
+             and f33.dateTime &lt; #{endDate} 
+         </if>
+         <if test="devices > 0">
+             and f33.deviceNo = ${devices}
+         </if>
+    </select>
+</mapper>

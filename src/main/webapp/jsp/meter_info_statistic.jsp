@@ -92,7 +92,7 @@
 		success:function(result) {
 			var data = result.data;
 			$("#devices").empty();
-			var str ="<option value='0'>全部设备</option>";
+			var str ="";
 			for (var i = 0;i<data.length;i++) {
 				str+=("<option value='"+data[i].deviceNo+"'>"+data[i].deviceName+"</option>");
 			}
