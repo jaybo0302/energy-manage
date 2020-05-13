@@ -23,7 +23,7 @@
     <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
     <script>DD_belatedPNG.fix('*');</script>
     <![endif]-->
-    <title>能源管理系统 - 登录</title>
+    <title>无组织一体化后台系统 - 登录</title>
 </head>
 <body>
 <div class="wrapper">

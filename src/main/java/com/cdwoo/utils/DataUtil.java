@@ -347,6 +347,21 @@ public class DataUtil {
 	}
 	
 	/**
+	 * A.9　数据格式09
+		格式定义见表A.10：
+		表A.10　数据格式09定义
+		字节名称	字  节  格  式
+			    |D7	D6	D5	D4 |	D3	D2	D1	D0|
+		BYTE1	|  BCD码千分位    |	     BCD码万分位      |
+		BYTE2	|  BCD码十分位    |	     BCD码百分位      |
+		BYTE3	| S|  BCD码十位  |	       BCD码个位      |
+	 */
+	public static String A9(String data1, String data2, String data3) {
+		return (Integer.parseInt(data1.substring(0,1), 16) > 7 ? "-" : "")
+				+ (Integer.parseInt(data1.substring(0,1), 16) > 7 ? (Integer.parseInt(data1.substring(0,1), 16)-8):Integer.parseInt(data1.substring(0,1))) 
+				+ data1.substring(1,2) + "." + data2 + data3;
+	}
+	/**
 	 * F25 当前三相及总有/无功功率、功率因数，三相电压、电流、零序电流
 	 * @param datas
 	 * @return
@@ -388,6 +403,7 @@ public class DataUtil {
 		if (activePowerStr.toLowerCase().contains("e")) {
 			activePowerStr = "0";
 		} else {
+			activePowerStr = A9(datas[7], datas[6], datas[5]);
 			activePowerStr = String.valueOf(Float.parseFloat(activePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前A相有功功率
@@ -395,6 +411,7 @@ public class DataUtil {
 		if (aActivePowerStr.toLowerCase().contains("e")) {
 			aActivePowerStr = "0";
 		} else {
+			aActivePowerStr = A9(datas[10], datas[9], datas[8]);
 			aActivePowerStr = String.valueOf(Float.parseFloat(aActivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前B相有功功率
@@ -402,6 +419,7 @@ public class DataUtil {
 		if (bActivePowerStr.toLowerCase().contains("e")) {
 			bActivePowerStr = "0";
 		} else {
+			bActivePowerStr = A9(datas[13], datas[12], datas[11]);
 			bActivePowerStr = String.valueOf(Float.parseFloat(bActivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前C相有功功率
@@ -409,6 +427,7 @@ public class DataUtil {
 		if (cActivePowerStr.toLowerCase().contains("e")) {
 			cActivePowerStr = "0";
 		} else {
+			cActivePowerStr = A9(datas[16], datas[15], datas[14]);
 			cActivePowerStr = String.valueOf(Float.parseFloat(cActivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前总无功功率 
@@ -416,6 +435,7 @@ public class DataUtil {
 		if (reactivePowerStr.toLowerCase().contains("e")) {
 			reactivePowerStr = "0";
 		} else {
+			reactivePowerStr = A9(datas[19], datas[18], datas[17]);
 			reactivePowerStr = String.valueOf(Float.parseFloat(reactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前A相无功功率
@@ -423,6 +443,7 @@ public class DataUtil {
 		if (aReactivePowerStr.toLowerCase().contains("e")) {
 			aReactivePowerStr = "0";
 		} else {
+			aReactivePowerStr = A9(datas[22], datas[21], datas[20]);
 			aReactivePowerStr = String.valueOf(Float.parseFloat(aReactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前B相无功功率
@@ -430,6 +451,7 @@ public class DataUtil {
 		if (bReactivePowerStr.toLowerCase().contains("e")) {
 			bReactivePowerStr = "0";
 		} else {
+			bReactivePowerStr = A9(datas[25], datas[24], datas[23]);
 			bReactivePowerStr = String.valueOf(Float.parseFloat(bReactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前C相无功功率
@@ -437,6 +459,7 @@ public class DataUtil {
 		if (cReactivePowerStr.toLowerCase().contains("e")) {
 			cReactivePowerStr = "0";
 		} else {
+			cReactivePowerStr = A9(datas[28], datas[27], datas[26]);
 			cReactivePowerStr = String.valueOf(Float.parseFloat(cReactivePowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前总功率因数 
@@ -513,6 +536,7 @@ public class DataUtil {
 		if (apparentPowerStr.toLowerCase().contains("e")) {
 			apparentPowerStr = "0";
 		} else {
+			apparentPowerStr = A9(datas[57], datas[56], datas[55]);
 			apparentPowerStr = String.valueOf(Float.parseFloat(apparentPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前A相视在功率
@@ -520,6 +544,7 @@ public class DataUtil {
 		if (apparentAPowerStr.toLowerCase().contains("e")) {
 			apparentAPowerStr = "0";
 		} else {
+			apparentAPowerStr = A9(datas[60], datas[59], datas[58]);
 			apparentAPowerStr = String.valueOf(Float.parseFloat(apparentAPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前B相视在功率
@@ -527,6 +552,7 @@ public class DataUtil {
 		if (apparentBPowerStr.toLowerCase().contains("e")) {
 			apparentBPowerStr = "0";
 		} else {
+			apparentBPowerStr = A9(datas[63], datas[62], datas[61]);
 			apparentBPowerStr = String.valueOf(Float.parseFloat(apparentBPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		//当前C相视在功率
@@ -534,6 +560,7 @@ public class DataUtil {
 		if (apparentCPowerStr.toLowerCase().contains("e")) {
 			apparentCPowerStr = "0";
 		} else {
+			apparentCPowerStr = A9(datas[66], datas[65], datas[64]);
 			apparentCPowerStr = String.valueOf(Float.parseFloat(apparentCPowerStr)*ptMap.get(deviceNo)*ctMap.get(deviceNo));
 		}
 		result.put("dateTime", dateTime);

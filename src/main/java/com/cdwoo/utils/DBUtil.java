@@ -53,20 +53,38 @@ public class DBUtil {
 	}
 	
 	public static void save(Map<String, Object> dataMap, String tableName) throws ClassNotFoundException, SQLException {
-		StringBuffer sbKey = new StringBuffer(512);
-		StringBuffer sbValue = new StringBuffer(512);
-		Set<String> keySet = dataMap.keySet();
-		for(String key : keySet) {
-			sbKey.append("`,`" + key);
-			if ("dateTime".equals(key)) {
-				sbValue.append(",'" + String.valueOf(dataMap.get(key)) + "'");
-			} else {
-				sbValue.append("," + String.valueOf(dataMap.get(key)));
+		try {
+			StringBuffer sbKey = new StringBuffer(512);
+			StringBuffer sbValue = new StringBuffer(512);
+			Set<String> keySet = dataMap.keySet();
+			StringBuffer update = new StringBuffer(512);
+			for(String key : keySet) {
+				sbKey.append("`,`" + key);
+				
+				if ("dateTime".equals(key)) {
+					sbValue.append(",'" + String.valueOf(dataMap.get(key)) + "'");
+					update.append(",`"+key+"`='"+ String.valueOf(dataMap.get(key)) + "'");
+				} else {
+					sbValue.append("," + String.valueOf(dataMap.get(key)));
+					update.append(",`"+key+"`="+ String.valueOf(dataMap.get(key)));
+				}
 			}
+			String insertSql = "insert into " + tableName + " (" + sbKey.substring(2, sbKey.length()) + "`)"
+					+"values("+sbValue.substring(1, sbValue.length()) + ")";
+			
+			String updateSql = "update `" + tableName + "_realtime` set "
+			        +  update.substring(1, update.length())+" where deviceNo=" 
+					+  String.valueOf(dataMap.get("deviceNo")) +" and companyId = " 
+			        + String.valueOf(dataMap.get("companyId")); 
+			CDLogger.info(updateSql);
+			getConnection().createStatement().execute(insertSql);
+			getConnection().createStatement().execute(updateSql);
+		} catch (Exception e) {
+			// TODO: handle exception
+			CDLogger.error(e);
+			e.printStackTrace();
 		}
-		String insertSql = "insert into " + tableName + " (" + sbKey.substring(2, sbKey.length()) + "`)"
-				+"values("+sbValue.substring(1, sbValue.length()) + ")";
-		getConnection().createStatement().execute(insertSql);
+		
 	}
 	
 	public static void saveOffline(int deviceNo) {
